@@ -1,91 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EV Bill Predictor</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-    }
-    input, select, button {
-      padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      background: #007BFF;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    #output {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 18px;
-      color: #333;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Bill Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #34495e;
+        }
+        #output {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #27ae60;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>EV Bill Predictor</h2>
-    <input type="number" id="usage" placeholder="Enter kWh used" min="0" />
-    <select id="charging-level">
-      <option value="">Select Charging Level</option>
-      <option value="1">Level 1 (Slow)</option>
-      <option value="2">Level 2 (Medium)</option>
-      <option value="3">DC Fast</option>
-    </select>
-    <button id="calculate-btn">Calculate Bill</button>
-    <p id="output"></p>
-  </div>
+    <h1>EV Bill Predictor</h1>
+    <div class="container">
+        <label for="usage">Energy Usage (kWh):</label>
+        <input type="number" id="usage" placeholder="Enter kWh used" min="0">
 
-  <script>
-    document.getElementById('calculate-btn').addEventListener('click', function(event) {
-      event.preventDefault();
+        <label for="charging-level">Charging Level:</label>
+        <select id="charging-level">
+            <option value="1">Level 1 (Slow)</option>
+            <option value="2">Level 2 (Medium)</option>
+            <option value="3">DC Fast (Quick)</option>
+        </select>
 
-      const usage = Number(document.getElementById('usage').value);
-      const level = Number(document.getElementById('charging-level').value);
+        <label for="time-of-day">Time of Day:</label>
+        <select id="time-of-day">
+            <option value="morning">Morning</option>
+            <option value="afternoon">Afternoon</option>
+            <option value="evening">Evening</option>
+            <option value="night">Night</option>
+        </select>
 
-      if (!usage || !level) {
-        alert("Please enter all inputs!");
-        return;
-      }
+        <label for="driving-type">Driving Type:</label>
+        <select id="driving-type">
+            <option value="commuter">Commuter</option>
+            <option value="casual">Casual Driver</option>
+            <option value="long-distance">Long Distance Traveler</option>
+        </select>
 
-      // Define rates per kWh for each level
-      let rate = 0;
-      if (level === 1) rate = 5;      // Level 1
-      else if (level === 2) rate = 8; // Level 2
-      else if (level === 3) rate = 12;// DC Fast
+        <button id="calculate-btn">Calculate Bill</button>
+        <p id="output"></p>
+    </div>
 
-      const bill = usage * rate;
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', function(event) {
+            event.preventDefault();
 
-      document.getElementById('output').innerText = `Estimated Bill: ₹${bill.toFixed(2)}`;
-    });
-  </script>
+            const usage = Number(document.getElementById('usage').value);
+            const level = Number(document.getElementById('charging-level').value);
+            const time = document.getElementById('time-of-day').value;
+            const driving = document.getElementById('driving-type').value;
+
+            if (!usage || usage <= 0) {
+                alert("Please enter a valid energy usage.");
+                return;
+            }
+
+            // Base rates per kWh by charging level
+            let rate = 0;
+            if (level === 1) rate = 5;
+            else if (level === 2) rate = 8;
+            else if (level === 3) rate = 12;
+
+            // Time of day adjustment
+            if (time === 'evening' || time === 'night') rate *= 1.1; // 10% more for peak time
+
+            // Driving type adjustment
+            if (driving === 'long-distance') rate *= 1.05; // 5% extra for heavy usage
+
+            const bill = (usage * rate).toFixed(2);
+
+            document.getElementById('output').innerText = `Estimated Bill: ₹${bill}`;
+        });
+    </script>
 </body>
 </html>
+
+
 
 
 
