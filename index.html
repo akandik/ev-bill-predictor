@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EV Charging Bill Predictor</title>
+</head>
+<body style="font-family: Arial; text-align:center; background-color:#f4f4f9;">
+    <h2>🔋 EV Self-Charging Bill Calculator (AI Powered)</h2>
+    <form action="/predict" method="post">
+        <input type="text" name="energy" placeholder="Energy Consumed (kWh)" required><br><br>
+        <input type="text" name="duration" placeholder="Charging Duration (hours)" required><br><br>
+        <input type="text" name="rate" placeholder="Charging Rate (kW)" required><br><br>
+        <input type="text" name="temperature" placeholder="Temperature (°C)" required><br><br>
+
+        <select name="charger" required>
+            <option>Level 1</option>
+            <option>Level 2</option>
+            <option>DC Fast Charger</option>
+        </select><br><br>
+
+        <select name="time" required>
+            <option>Morning</option>
+            <option>Afternoon</option>
+            <option>Evening</option>
+            <option>Night</option>
+        </select><br><br>
+
+        <select name="user" required>
+            <option>Commuter</option>
+            <option>Casual Driver</option>
+            <option>Long-Distance Traveler</option>
+        </select><br><br>
+
+        <button type="submit">Calculate Bill</button>
+    </form>
+</body>
+</html>
