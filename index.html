@@ -81,6 +81,12 @@
             <option value="long-distance">Long Distance Traveler</option>
         </select>
 
+        <label for="charging-duration">Charging Duration (hours):</label>
+        <input type="number" id="charging-duration" placeholder="Enter hours" min="0">
+
+        <label for="temperature">Temperature (°C):</label>
+        <input type="number" id="temperature" placeholder="Enter temperature" min="-10" max="50">
+
         <button id="calculate-btn">Calculate Bill</button>
         <p id="output"></p>
     </div>
@@ -93,9 +99,11 @@
             const level = Number(document.getElementById('charging-level').value);
             const time = document.getElementById('time-of-day').value;
             const driving = document.getElementById('driving-type').value;
+            const duration = Number(document.getElementById('charging-duration').value);
+            const temp = Number(document.getElementById('temperature').value);
 
-            if (!usage || usage <= 0) {
-                alert("Please enter a valid energy usage.");
+            if (!usage || usage <= 0 || !duration || duration <= 0 || isNaN(temp)) {
+                alert("Please enter valid values for all fields.");
                 return;
             }
 
@@ -111,6 +119,12 @@
             // Driving type adjustment
             if (driving === 'long-distance') rate *= 1.05; // 5% extra for heavy usage
 
+            // Charging duration adjustment (longer charging may slightly increase cost)
+            if (duration > 4) rate *= 1.05;
+
+            // Temperature adjustment (very low or very high temp increases battery energy loss)
+            if (temp < 10 || temp > 35) rate *= 1.05;
+
             const bill = (usage * rate).toFixed(2);
 
             document.getElementById('output').innerText = `Estimated Bill: ₹${bill}`;
@@ -118,6 +132,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
