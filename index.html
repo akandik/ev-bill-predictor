@@ -30,7 +30,22 @@
             <option>Long-Distance Traveler</option>
         </select><br><br>
 
-        <button type="submit">Calculate Bill</button>
-    </form>
+        <button id="calculate-btn">Calculate Bill</button>
+
+<script>
+document.getElementById('calculate-btn').addEventListener('click', function(event) {
+    event.preventDefault(); 
+    calculateBill();
+});
+
+function calculateBill() {
+    // Example: fetch values from input fields and calculate
+    const usage = Number(document.getElementById('usage').value);
+    const rate = 10; // example
+    alert(`Your estimated bill is ₹${usage * rate}`);
+}
+</script>
+
 </body>
 </html>
+
