@@ -1,51 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>EV Charging Bill Predictor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EV Bill Predictor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #output {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
 </head>
-<body style="font-family: Arial; text-align:center; background-color:#f4f4f9;">
-    <h2>🔋 EV Self-Charging Bill Calculator (AI Powered)</h2>
-    <form action="/predict" method="post">
-        <input type="text" name="energy" placeholder="Energy Consumed (kWh)" required><br><br>
-        <input type="text" name="duration" placeholder="Charging Duration (hours)" required><br><br>
-        <input type="text" name="rate" placeholder="Charging Rate (kW)" required><br><br>
-        <input type="text" name="temperature" placeholder="Temperature (°C)" required><br><br>
+<body>
+  <div class="container">
+    <h2>EV Bill Predictor</h2>
+    <input type="number" id="usage" placeholder="Enter kWh used" min="0" />
+    <select id="charging-level">
+      <option value="">Select Charging Level</option>
+      <option value="1">Level 1 (Slow)</option>
+      <option value="2">Level 2 (Medium)</option>
+      <option value="3">DC Fast</option>
+    </select>
+    <button id="calculate-btn">Calculate Bill</button>
+    <p id="output"></p>
+  </div>
 
-        <select name="charger" required>
-            <option>Level 1</option>
-            <option>Level 2</option>
-            <option>DC Fast Charger</option>
-        </select><br><br>
+  <script>
+    document.getElementById('calculate-btn').addEventListener('click', function(event) {
+      event.preventDefault();
 
-        <select name="time" required>
-            <option>Morning</option>
-            <option>Afternoon</option>
-            <option>Evening</option>
-            <option>Night</option>
-        </select><br><br>
+      const usage = Number(document.getElementById('usage').value);
+      const level = Number(document.getElementById('charging-level').value);
 
-        <select name="user" required>
-            <option>Commuter</option>
-            <option>Casual Driver</option>
-            <option>Long-Distance Traveler</option>
-        </select><br><br>
+      if (!usage || !level) {
+        alert("Please enter all inputs!");
+        return;
+      }
 
-        <button id="calculate-btn">Calculate Bill</button>
+      // Define rates per kWh for each level
+      let rate = 0;
+      if (level === 1) rate = 5;      // Level 1
+      else if (level === 2) rate = 8; // Level 2
+      else if (level === 3) rate = 12;// DC Fast
 
-<script>
-document.getElementById('calculate-btn').addEventListener('click', function(event) {
-    event.preventDefault(); 
-    calculateBill();
-});
+      const bill = usage * rate;
 
-function calculateBill() {
-    // Example: fetch values from input fields and calculate
-    const usage = Number(document.getElementById('usage').value);
-    const rate = 10; // example
-    alert(`Your estimated bill is ₹${usage * rate}`);
-}
-</script>
-
+      document.getElementById('output').innerText = `Estimated Bill: ₹${bill.toFixed(2)}`;
+    });
+  </script>
 </body>
 </html>
+
+
 
